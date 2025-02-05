@@ -48,6 +48,10 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(gamespy)
 
+if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER "12.0.8804")
+    add_subdirectory(Dependencies/olddx)
+endif()
+
 # Add main build targets
 add_subdirectory(Code)
 
