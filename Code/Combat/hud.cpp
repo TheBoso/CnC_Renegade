@@ -1664,6 +1664,10 @@ static	void	Target_Update( void )
 			if ( p_obj != NULL && p_obj->Is_HUD_Pokable_Indicator_Enabled() ) {
 				draw_chevrons = true;
 			}
+			if(obj->As_SmartGameObj() != NULL && obj->As_SoldierGameObj() != NULL && COMBAT_STAR->Is_Teammate(p_obj)) 
+			{
+				draw_chevrons = true;
+			}
 			if ( obj->As_SmartGameObj() != NULL &&
 				  obj->As_SmartGameObj()->As_VehicleGameObj() != NULL &&
 				  COMBAT_STAR->Is_Permitted_To_Enter_Vehicle() &&
