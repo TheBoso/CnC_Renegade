@@ -101,6 +101,8 @@
 #include "colmathaabox.h" // Agressive inlining causes linker issues if this isn't here.
 #include "consolefunction.h"
 #include "player.h"
+#include "scripts.h"
+
 
 /*
 **
@@ -2028,47 +2030,74 @@ void SoldierGameObj::Apply_Control( void )
 								//  Possession
 								//
 
-								if(COMBAT_STAR->Is_Teammate(physical_target) == true)
-								{
-                                        SoldierGameObj* oldPlayer = COMBAT_STAR;
-										int myID = CombatManager::Get_My_Id ();
-                                         if(physical_target->As_SoldierGameObj() != NULL)
-                                         {
-oldPlayer->Peek_Model()->Set_Hidden( false );
-PlayerDataClass* playerData = oldPlayer->Get_Player_Data();
-                                            oldPlayer->Set_Control_Owner(-1);
-oldPlayer->Set_Player_Data(NULL);
-//
-		// Remove any innate observers
-		//
-		const GameObjObserverList & observer_list = oldPlayer->Get_Observers();
-		for (int index = 0; index < observer_list.Count(); index++) 
-{
-			if (!stricmp(observer_list[index]->Get_Name(), "Innate Soldier"))
- {
-				oldPlayer->Remove_Observer(observer_list[index]);
-				break; // probably not safe to continue
-}
-			}
-                 
 //
 
-											SoldierGameObj* soldier = physical_target->As_SoldierGameObj();
-											CombatManager::Set_The_Star(soldier);
-                           soldier->Set_Control_Owner(myID);
-	soldier->Set_Player_Data( playerData);
-											ActionParamsStruct parameters;
-											COMBAT_STAR->Get_Action()->Follow_Input( parameters );
+								if (COMBAT_STAR -> Is_Teammate(physical_target) == true) 
+									{
+						  				SoldierGameObj * oldPlayer = COMBAT_STAR;
+						  				int myID = CombatManager::Get_My_Id();
+						  				int aiControlOwner = SERVER_CONTROL_OWNER;
+						  				if (physical_target -> As_SoldierGameObj() != NULL) 
+											{
+						    				oldPlayer -> Peek_Model() -> Set_Hidden(false);
+						    				PlayerDataClass * playerData = oldPlayer -> Get_Player_Data();
+	    									oldPlayer -> Set_Control_Owner(aiControlOwner);
+						                     SoldierGameObj * soldier = physical_target -> As_SoldierGameObj();
+						                	PlayerDataClass* aiPlayerData = soldier->Get_Player_Data();
+   						                	oldPlayer -> Set_Player_Data(aiPlayerData);
+						                    //	oldPlayer->Control_Enable (false);
+                    
+                                             const GameObjObserverList & old_observers = oldPlayer->Get_Observers();
+						                      const GameObjObserverList & observer_list = soldier -> Get_Observers();
+						   
+   											soldier->Remove_All_Observers();
+							 for (int index = 0; index < old_observers.Count(); index++)
+ 							{
+						      if (!stricmp(old_observers[index] -> Get_Name(), "Innate Soldier"))
+                              {
+						      	
+						        soldier -> Add_Observer(old_observers[index]);
+						      }
+ 							}
+                                          
+                           
+			
+  //
+						    // Copy over observers other than "Innate Soldier"
+						    //
 
-                                         }
-                                        else if (physical_target->As_VehicleGameObj() != NULL)
-                                        {
-     									//	COMBAT_STAR->Set_Control_Owner(-1);
-										//	COMBAT_STAR->Generate_Control();
-											VehicleGameObj* vehicle = physical_target->As_VehicleGameObj();
-                                            vehicle->Set_Control_Owner(CombatManager::Get_My_Id ());
-                                        //   vehicle->Generate_Control();
-                                        }
+							 oldPlayer->Remove_All_Observers();
+
+						    oldPlayer->Set_Innate_Observer(new SoldierObserverClass());
+						    oldPlayer->Add_Observer(oldPlayer->Get_Innate_Observer());		
+
+
+
+	    	
+
+						  	oldPlayer->Start_Observers();
+
+						    
+
+			   				soldier -> Set_Player_Data(playerData);
+						    soldier -> Set_Control_Owner(myID);
+						    soldier->Control_Enable (true);
+							soldier->Init();
+
+
+
+						  	soldier->Start_Observers();
+
+ 							CombatManager::Set_The_Star(soldier);
+						}
+
+						  else if (physical_target -> As_VehicleGameObj() != NULL) {
+						    //	COMBAT_STAR->Set_Control_Owner(-1);
+						    //	COMBAT_STAR->Generate_Control();
+						    VehicleGameObj * vehicle = physical_target -> As_VehicleGameObj();
+						    vehicle -> Set_Control_Owner(CombatManager::Get_My_Id());
+						    //   vehicle->Generate_Control();
+						  }
 
 								}
 									
