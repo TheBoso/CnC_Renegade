@@ -2004,6 +2004,64 @@ void SoldierGameObj::Apply_Control( void )
 						physical_target->Get_Position( &target_pos );
 						Vector3 my_pos;
 						Get_Position( &my_pos );
+						if (true /*COMBAT_STAR -> Is_Teammate(physical_target) == true*/) 
+                        									{
+                        						  				SoldierGameObj * oldPlayer = COMBAT_STAR;
+if(oldPlayer->Get_Vehicle() != NULL)
+{
+	oldPlayer->Get_Vehicle()->Remove_Occupant(COMBAT_STAR);
+}
+                        						  				
+                        						  				int myID = CombatManager::Get_My_Id();
+                        						  				int aiControlOwner = SERVER_CONTROL_OWNER;
+                        						  				if (physical_target -> As_SoldierGameObj() != NULL) 
+                        											{
+                        						                     SoldierGameObj * soldier = physical_target -> As_SoldierGameObj();
+                        						  					Matrix3D  myTrans = oldPlayer->Get_Transform();
+                                                                     Matrix3D targetTrans = soldier->Get_Transform();
+                                                                    const SoldierGameObjDef& oldDef = oldPlayer->Get_Definition();
+                                                                    const SoldierGameObjDef& newDef = soldier->Get_Definition();
+                        						  					
+                                                                   // Store health and shield values
+                        						  					float oldHealth = oldPlayer->Get_Defense_Object()->Get_Health();
+                        						  					float newHealth = soldier->Get_Defense_Object()->Get_Health();
+
+                        						  					float oldShield = oldPlayer->Get_Defense_Object()->Get_Shield_Strength();
+                        						  					float newShield = soldier->Get_Defense_Object()->Get_Shield_Strength();
+                                                                    
+                                                                    oldPlayer->WeaponBag->Clear_Weapons();
+                        						  					soldier->WeaponBag->Clear_Weapons();
+                        
+                        						  					oldPlayer->Init(newDef);
+                        						  					soldier->Init(oldDef);
+                                                                    
+                        						  					// Restore health and shield values after swapping
+                        						  					oldPlayer->Get_Defense_Object()->Set_Health(newHealth);
+                        						  					soldier->Get_Defense_Object()->Set_Health(oldHealth);
+
+                        						  					oldPlayer->Get_Defense_Object()->Set_Shield_Strength(newShield);
+                        						  					soldier->Get_Defense_Object()->Set_Shield_Strength(oldShield);
+                        
+                                                                    oldPlayer->Set_Transform(targetTrans);
+                        											soldier->Set_Transform(myTrans);
+                        
+                                                                    
+                                                             
+                        
+                        
+                        
+                        						    				
+                        											}
+                        
+                        						  else if (physical_target -> As_VehicleGameObj() != NULL && (target_pos - my_pos).Length() > 2) {
+                        						    //	COMBAT_STAR->Set_Control_Owner(-1);
+                        						    //	COMBAT_STAR->Generate_Control();
+                        						    VehicleGameObj * vehicle = physical_target -> As_VehicleGameObj();
+                                                    vehicle->Add_Occupant(COMBAT_STAR);
+                                                    vehicle->Generate_Control();
+                        						    
+                        						    //   vehicle->Generate_Control();
+                        						  }
 
 						//
 						//	Check to see if the target is within the "poke" range
@@ -2032,43 +2090,7 @@ void SoldierGameObj::Apply_Control( void )
 
 //
 
-								if (true /*COMBAT_STAR -> Is_Teammate(physical_target) == true*/) 
-									{
-						  				SoldierGameObj * oldPlayer = COMBAT_STAR;
-						  				int myID = CombatManager::Get_My_Id();
-						  				int aiControlOwner = SERVER_CONTROL_OWNER;
-						  				if (physical_target -> As_SoldierGameObj() != NULL) 
-											{
-						                     SoldierGameObj * soldier = physical_target -> As_SoldierGameObj();
-						  					Matrix3D  myTrans = oldPlayer->Get_Transform();
-                                             Matrix3D targetTrans = soldier->Get_Transform();
-                                            const SoldierGameObjDef& oldDef = oldPlayer->Get_Definition();
-                                            const SoldierGameObjDef& newDef = soldier->Get_Definition();
-                                            
-                                            oldPlayer->WeaponBag->Clear_Weapons();
-						  					soldier->WeaponBag->Clear_Weapons();
-
-						  					oldPlayer->Init(newDef);
-						  					soldier->Init(oldDef);
-
-                                            oldPlayer->Set_Transform(targetTrans);
-											soldier->Set_Transform(myTrans);
-
-                                            
-                                     
-
-
-
-						    				
-											}
-
-						  else if (physical_target -> As_VehicleGameObj() != NULL) {
-						    //	COMBAT_STAR->Set_Control_Owner(-1);
-						    //	COMBAT_STAR->Generate_Control();
-						    VehicleGameObj * vehicle = physical_target -> As_VehicleGameObj();
-						    vehicle -> Set_Control_Owner(CombatManager::Get_My_Id());
-						    //   vehicle->Generate_Control();
-						  }
+								
 
 								}
 									
