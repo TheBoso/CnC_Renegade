@@ -292,7 +292,6 @@ bool	DamageableGameObj::Load( ChunkLoadClass &cload )
 				break;
 
 		}
-        PlayerType = PLAYERTYPE_RENEGADE;
 		cload.Close_Chunk();
 	}
 
