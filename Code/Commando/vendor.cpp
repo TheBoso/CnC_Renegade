@@ -253,10 +253,11 @@ VendorClass::Purchase_Character
                      Vector3 offset = Vector3(1,0,0);
                      SoldierGameObj* soldier = spawnedSoldier->As_SoldierGameObj();
                      soldier->Set_Position(playerPos + offset);
-               		ScriptClass* script = ScriptManager::Create_Script("M00_Action_Innate_Follow_Player");
-               		soldier->Add_Observer(script);
-                //    soldier->Set_Control_Owner(SmartGameObj::SERVER_CONTROL_OWNER);
-                //    soldier->Set_Innate_Observer(new SoldierObserverClass());
+                 	ScriptClass* script = ScriptManager::Create_Script("M09_Mobius_Follow");
+                 	soldier->Add_Observer(script);
+                     soldier->Set_Control_Owner(-1);
+                 	soldier->Set_Innate_Observer(new SoldierObserverClass());
+                 	soldier->Add_Observer(soldier->Get_Innate_Observer());
                     soldier->Start_Observers();
                    }
 
