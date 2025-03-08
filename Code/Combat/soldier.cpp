@@ -99,6 +99,10 @@
 #include "ffactory.h"
 #include "realcrc.h"
 #include "colmathaabox.h" // Agressive inlining causes linker issues if this isn't here.
+#include "consolefunction.h"
+#include "player.h"
+#include "scripts.h"
+
 
 /*
 **
@@ -1992,7 +1996,8 @@ void SoldierGameObj::Apply_Control( void )
 				//
 //				DamageableGameObj *damageable_target = HUDInfo::Get_Weapon_Target_Object();
 				DamageableGameObj *damageable_target = HUDInfo::Get_Info_Object();
-				if ( damageable_target != NULL ) {
+				if ( damageable_target != NULL ) 
+				{
 					PhysicalGameObj *physical_target = damageable_target->As_PhysicalGameObj();
 					if ( physical_target != NULL ) {
 						Vector3 target_pos;
@@ -2003,12 +2008,14 @@ void SoldierGameObj::Apply_Control( void )
 						//
 						//	Check to see if the target is within the "poke" range
 						//
-						if ( (target_pos - my_pos).Length() <= 2 ) {
+						if ( (target_pos - my_pos).Length() <= 2 ) 
+						{
 
 							//
 							//	Notify all the observers
 							//
-							if ( CombatManager::I_Am_Server () ) {
+							if ( CombatManager::I_Am_Server () ) 
+							{
 								const GameObjObserverList & observer_list = physical_target->Get_Observers();
 								for( int index = 0; index < observer_list.Count(); index++ ) {
 									observer_list[ index ]->Poked( physical_target, this );
@@ -2018,7 +2025,53 @@ void SoldierGameObj::Apply_Control( void )
 							//
 							//	Was the player the soldier who did the poking?
 							//
-							if ( COMBAT_STAR == this ) {
+						
+								//
+								//  Possession
+								//
+
+//
+
+								if (true /*COMBAT_STAR -> Is_Teammate(physical_target) == true*/) 
+									{
+						  				SoldierGameObj * oldPlayer = COMBAT_STAR;
+						  				int myID = CombatManager::Get_My_Id();
+						  				int aiControlOwner = SERVER_CONTROL_OWNER;
+						  				if (physical_target -> As_SoldierGameObj() != NULL) 
+											{
+						                     SoldierGameObj * soldier = physical_target -> As_SoldierGameObj();
+						  					Matrix3D  myTrans = oldPlayer->Get_Transform();
+                                             Matrix3D targetTrans = soldier->Get_Transform();
+                                            const SoldierGameObjDef& oldDef = oldPlayer->Get_Definition();
+                                            const SoldierGameObjDef& newDef = soldier->Get_Definition();
+                                            
+                                            oldPlayer->WeaponBag->Clear_Weapons();
+						  					soldier->WeaponBag->Clear_Weapons();
+
+						  					oldPlayer->Init(newDef);
+						  					soldier->Init(oldDef);
+
+                                            oldPlayer->Set_Transform(targetTrans);
+											soldier->Set_Transform(myTrans);
+
+                                            
+                                     
+
+
+
+						    				
+											}
+
+						  else if (physical_target -> As_VehicleGameObj() != NULL) {
+						    //	COMBAT_STAR->Set_Control_Owner(-1);
+						    //	COMBAT_STAR->Generate_Control();
+						    VehicleGameObj * vehicle = physical_target -> As_VehicleGameObj();
+						    vehicle -> Set_Control_Owner(CombatManager::Get_My_Id());
+						    //   vehicle->Generate_Control();
+						  }
+
+								}
+									
 
 								//
 								//	Display this object in the encyclopedia
@@ -2037,13 +2090,14 @@ void SoldierGameObj::Apply_Control( void )
 									type = (physical_target->As_SimpleGameObj())->Get_Definition().Get_Player_Terminal_Type();
 									if (type != PlayerTerminalClass::TYPE_NONE) {
 
+											ConsoleFunctionManager::Print("in");
+
 										//
 										//	Show the player terminal
 										//
 										PlayerTerminalClass::Get_Instance()->Display_Terminal( this, type );
 									}
 								}
-							}
 						}
 					}
 				}
