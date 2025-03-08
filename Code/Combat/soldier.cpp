@@ -2009,7 +2009,9 @@ void SoldierGameObj::Apply_Control( void )
                         						  				SoldierGameObj * oldPlayer = COMBAT_STAR;
 if(oldPlayer->Get_Vehicle() != NULL)
 {
-	oldPlayer->Get_Vehicle()->Remove_Occupant(COMBAT_STAR);
+    VehicleGameObj* oldVehicle = oldPlayer->Get_Vehicle();
+	oldPlayer->Exit_Vehicle();
+    oldVehicle->Generate_Control();
 }
                         						  				
                         						  				int myID = CombatManager::Get_My_Id();
