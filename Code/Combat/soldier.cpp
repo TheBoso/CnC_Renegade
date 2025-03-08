@@ -2032,50 +2032,35 @@ void SoldierGameObj::Apply_Control( void )
 
 //
 
-							if (COMBAT_STAR -> Is_Teammate(physical_target) == true) {
-								SoldierGameObj * oldPlayer = COMBAT_STAR;
-								int myID = CombatManager::Get_My_Id();
-								int aiControlOwner = SERVER_CONTROL_OWNER;
-								if (physical_target -> As_SoldierGameObj() != NULL) {
-									oldPlayer -> Peek_Model() -> Set_Hidden(false);
-									PlayerDataClass * playerData = oldPlayer -> Get_Player_Data();
-									oldPlayer -> Set_Control_Owner(aiControlOwner);
-									SoldierGameObj * soldier = physical_target -> As_SoldierGameObj();
-									PlayerDataClass * aiPlayerData = soldier -> Get_Player_Data();
-									oldPlayer -> Set_Player_Data(aiPlayerData);
-									//	oldPlayer->Control_Enable (false);
+								if (true /*COMBAT_STAR -> Is_Teammate(physical_target) == true*/) 
+									{
+						  				SoldierGameObj * oldPlayer = COMBAT_STAR;
+						  				int myID = CombatManager::Get_My_Id();
+						  				int aiControlOwner = SERVER_CONTROL_OWNER;
+						  				if (physical_target -> As_SoldierGameObj() != NULL) 
+											{
+						                     SoldierGameObj * soldier = physical_target -> As_SoldierGameObj();
+						  					Matrix3D  myTrans = oldPlayer->Get_Transform();
+                                             Matrix3D targetTrans = soldier->Get_Transform();
+                                            const SoldierGameObjDef& oldDef = oldPlayer->Get_Definition();
+                                            const SoldierGameObjDef& newDef = soldier->Get_Definition();
+                                            
+                                            oldPlayer->WeaponBag->Clear_Weapons();
+						  					soldier->WeaponBag->Clear_Weapons();
 
-									const GameObjObserverList & old_observers = oldPlayer -> Get_Observers();
-									const GameObjObserverList & observer_list = soldier -> Get_Observers();
+						  					oldPlayer->Init(newDef);
+						  					soldier->Init(oldDef);
 
-									soldier -> Remove_All_Observers();
-									for (int index = 0; index < old_observers.Count(); index++) {
-										if (!stricmp(old_observers[index] -> Get_Name(), "Innate Soldier")) {
+                                            oldPlayer->Set_Transform(targetTrans);
+											soldier->Set_Transform(myTrans);
 
-											soldier -> Add_Observer(old_observers[index]);
-										}
-									}
+                                            
+                                     
 
-									//
-									// Copy over observers other than "Innate Soldier"
-									//
 
-									oldPlayer -> Remove_All_Observers();
 
-									oldPlayer -> Set_Innate_Observer(new SoldierObserverClass());
-									oldPlayer -> Add_Observer(oldPlayer -> Get_Innate_Observer());
-
-									oldPlayer -> Start_Observers();
-
-									soldier -> Set_Player_Data(playerData);
-									soldier -> Set_Control_Owner(myID);
-									soldier -> Control_Enable(true);
-									soldier -> Init();
-
-									soldier -> Start_Observers();
-
-									CombatManager::Set_The_Star(soldier);
-								}
+						    				
+											}
 
 						  else if (physical_target -> As_VehicleGameObj() != NULL) {
 						    //	COMBAT_STAR->Set_Control_Owner(-1);
