@@ -2022,6 +2022,11 @@ if(oldPlayer->Get_Vehicle() != NULL)
                                                                     const SoldierGameObjDef& oldDef = oldPlayer->Get_Definition();
                                                                     const SoldierGameObjDef& newDef = soldier->Get_Definition();
                         						  					
+                        						  					BitStreamClass oldWeps; 
+                        						  					BitStreamClass newWeps;
+
+                        						  					oldPlayer->WeaponBag->Export_Weapon_List(oldWeps);
+                                                                    soldier->WeaponBag->Export_Weapon_List(newWeps);
                                                                    // Store health and shield values
                         						  					float oldHealth = oldPlayer->Get_Defense_Object()->Get_Health();
                         						  					float newHealth = soldier->Get_Defense_Object()->Get_Health();
@@ -2041,9 +2046,14 @@ if(oldPlayer->Get_Vehicle() != NULL)
 
                         						  					oldPlayer->Get_Defense_Object()->Set_Shield_Strength(newShield);
                         						  					soldier->Get_Defense_Object()->Set_Shield_Strength(oldShield);
+
+                                                                    oldPlayer->WeaponBag->Import_Weapon_List(newWeps);
+                                                                    soldier->WeaponBag->Import_Weapon_List(oldWeps);
                         
                                                                     oldPlayer->Set_Transform(targetTrans);
                         											soldier->Set_Transform(myTrans);
+                                                                    
+
                         
                                                                     
                                                              
