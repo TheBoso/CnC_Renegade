@@ -2016,6 +2016,7 @@ if(oldPlayer->Get_Vehicle() != NULL)
                         						  				int aiControlOwner = SERVER_CONTROL_OWNER;
                         						  				if (physical_target -> As_SoldierGameObj() != NULL) 
                         											{
+                                                                     /*
                         						                     SoldierGameObj * soldier = physical_target -> As_SoldierGameObj();
                         						  					Matrix3D  myTrans = oldPlayer->Get_Transform();
                                                                      Matrix3D targetTrans = soldier->Get_Transform();
@@ -2044,7 +2045,43 @@ if(oldPlayer->Get_Vehicle() != NULL)
                         
                                                                     oldPlayer->Set_Transform(targetTrans);
                         											soldier->Set_Transform(myTrans);
-                        
+                        */
+                        						  					oldPlayer -> Peek_Model() -> Set_Hidden(false);
+                        						  					PlayerDataClass * playerData = oldPlayer -> Get_Player_Data();
+                        						  					oldPlayer -> Set_Control_Owner(aiControlOwner);
+                        						  					SoldierGameObj * soldier = physical_target -> As_SoldierGameObj();
+                        						  					PlayerDataClass * aiPlayerData = soldier -> Get_Player_Data();
+                        						  					oldPlayer -> Set_Player_Data(aiPlayerData);
+                        						  					//	oldPlayer->Control_Enable (false);
+
+                        						  					const GameObjObserverList & old_observers = oldPlayer -> Get_Observers();
+                        						  					const GameObjObserverList & observer_list = soldier -> Get_Observers();
+
+                        						  					soldier -> Remove_All_Observers();
+                        						  					for (int index = 0; index < old_observers.Count(); index++) {
+                        						  						if (!stricmp(old_observers[index] -> Get_Name(), "Innate Soldier")) {
+
+                        						  							soldier -> Add_Observer(old_observers[index]);
+                        						  						}
+                        						  					}
+
+                        						  					//
+                        						  					// Copy over observers other than "Innate Soldier"
+                        						  					//
+
+                        						  					oldPlayer -> Remove_All_Observers();
+
+                        						  					oldPlayer -> Set_Innate_Observer(new SoldierObserverClass());
+                        						  					oldPlayer -> Add_Observer(oldPlayer -> Get_Innate_Observer());
+
+                        						  					oldPlayer -> Start_Observers();
+
+                        						  					soldier -> Set_Player_Data(playerData);
+                        						  					soldier -> Set_Control_Owner(myID);
+                        						  					soldier -> Control_Enable(true);
+                                                                    soldier->Generate_Control();
+
+                        						  					CombatManager::Set_The_Star(soldier);
                                                                     
                                                              
                         
