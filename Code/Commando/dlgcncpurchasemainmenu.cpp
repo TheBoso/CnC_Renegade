@@ -70,7 +70,7 @@
 #include "specialbuilds.h"
 
 
-bool CNCPurchaseMainMenuClass::SecretsEnabled = false;
+bool CNCPurchaseMainMenuClass::SecretsEnabled = true;
 
 
 ////////////////////////////////////////////////////////////////
