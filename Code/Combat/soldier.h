@@ -94,6 +94,7 @@ public:
 	virtual bool								Load( ChunkLoadClass &cload );
 	virtual const PersistFactoryClass &	Get_Factory( void ) const;
 
+
 	DialogueClass *							Get_Dialog_List( void )			{ return DialogList; }
 
 	DECLARE_EDITABLE( SoldierGameObjDef, SmartGameObjDef );
@@ -219,6 +220,7 @@ public:
 
 	void				Reset_Loiter_Delay( void )				{ HumanState.Reset_Loiter_Delay(); }
 	void				Set_Loiters_Allowed( bool allowed )	{ HumanState.Set_Loiters_Allowed( allowed ); }
+
 
 	virtual	void	Get_Information( StringClass & string );
 	//virtual	void	Get_Extended_Information( StringClass & description );

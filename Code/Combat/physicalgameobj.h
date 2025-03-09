@@ -238,6 +238,7 @@ public:
 
 	void				Enable_HUD_Pokable_Indicator( bool enable );
 	bool				Is_HUD_Pokable_Indicator_Enabled( void )		{ return HUDPokableIndicatorEnabled; } 
+    bool                hasBeenKilledBefore;
 
 	virtual void		Set_Player_Type(int type);
 
