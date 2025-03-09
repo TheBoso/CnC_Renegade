@@ -111,6 +111,11 @@ public:
 
 	static void						Free_Definitions (void);
 
+   //
+   //  Randomizer
+   //  
+   static DefinitionClass* Get_Random_Definition (void);
+
 protected:
 
 	/////////////////////////////////////////////////////////////////////

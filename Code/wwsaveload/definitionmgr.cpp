@@ -951,3 +951,14 @@ DefinitionMgrClass::fnCompareDefinitionsCallback
 
    return result;
 }
+
+DefinitionClass * DefinitionMgrClass::Get_Random_Definition()
+{
+  int size = _DefinitionCount;
+  if(size < 1) return NULL;
+  int index = rand() % size;
+  return _SortedDefinitionArray[index];
+
+
+
+}
