@@ -715,7 +715,11 @@ void PhysicalGameObj::Teleport_To_Host_Bone( void )
 
 void PhysicalGameObj::Post_Think( void )
 {
+    if(this != COMBAT_STAR && COMBAT_STAR->Is_Enemy(this))
+{
     PlayerType = PLAYERTYPE_RENEGADE;
+}
+
 	if ( AnimControl != NULL ) {
 		if ( AnimControl->Peek_Model() != Peek_Model() ) {
 			Debug_Say(( "Anim control doesn't match Model\n" ));
