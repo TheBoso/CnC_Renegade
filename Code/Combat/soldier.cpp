@@ -2635,7 +2635,7 @@ void	SoldierGameObj::Post_Think( void )
 if(HasRerolledCharacter == false)
 {
 Re_Init(*reinterpret_cast<const SoldierGameObjDef*>(DefinitionMgrClass::Get_Random_Soldier_Definition()));
-Post_Re_Init();
+//Post_Re_Init();
 HasRerolledCharacter = true;
 }
 
