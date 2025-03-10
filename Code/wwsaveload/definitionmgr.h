@@ -115,6 +115,10 @@ public:
    //  Randomizer
    //  
    static DefinitionClass* Get_Random_Definition (void);
+   static DefinitionClass* Get_Random_Soldier_Definition(void);
+	static DefinitionClass* Get_Random_Vehicle_Definition(void);
+    
+
 
 protected:
 

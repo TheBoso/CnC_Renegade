@@ -231,6 +231,7 @@ protected:
 	float						StealthPowerupTimer;	// stealth power is in effect
 	float						StealthFiringTimer;	// timer for de-cloaking during
 	StealthEffectClass *	StealthEffect;			// possible stealth effect
+    bool                    HasRerolledCharacter;
 
 private:
 

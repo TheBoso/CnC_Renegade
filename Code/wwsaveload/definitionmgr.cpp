@@ -46,6 +46,11 @@
 #include "twiddler.h"
 #include <string.h>
 #include "wwprofile.h"
+#include <vector>
+
+#include "soldier.h"
+#include "motorvehicle.h"
+
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -961,4 +966,51 @@ DefinitionClass * DefinitionMgrClass::Get_Random_Definition()
 
 
 
+}
+
+DefinitionClass * DefinitionMgrClass::Get_Random_Soldier_Definition()
+{
+	std::vector<DefinitionClass *> soldiers;
+	for (int index = 0; index < _DefinitionCount; index++) 
+	{
+		DefinitionClass *definition = _SortedDefinitionArray[index];
+		if(definition == NULL || definition->Get_Class_ID() != CLASSID_GAME_OBJECT_DEF_SOLDIER) 
+{
+continue;
+}
+
+        SoldierGameObjDef* soldier_casted = reinterpret_cast<SoldierGameObjDef*>(definition);
+		if (soldier_casted != NULL) 
+		{ 
+			soldiers.push_back(soldier_casted);
+		}
+	}
+
+	int size = soldiers.size();
+	if (size < 1) return NULL;
+    
+	int finalIndex = rand() % size;
+	return soldiers[finalIndex];
+}
+
+DefinitionClass * DefinitionMgrClass::Get_Random_Vehicle_Definition()
+{
+	std::vector<DefinitionClass *> soldiers;
+	for (int index = 0; index < _DefinitionCount; index++) 
+	{
+        
+		DefinitionClass *definition = _SortedDefinitionArray[index];
+		if(definition == NULL || definition->Get_Class_ID() != CLASSID_GAME_OBJECT_DEF_VEHICLE)  continue;
+        MotorVehicleDefClass* vehicle_casted = reinterpret_cast<MotorVehicleDefClass*>(definition);
+		if (vehicle_casted != NULL) 
+		{ 
+			soldiers.push_back(vehicle_casted);
+		}
+	}
+
+	int size = soldiers.size();
+	if (size < 1) return NULL;
+    
+	int finalIndex = rand() % size;
+	return soldiers[finalIndex];
 }
