@@ -3850,7 +3850,8 @@ void	SoldierGameObj::Apply_Damage_Extended( const OffenseObjectClass & damager, 
 	}
 
 
-	if ( health <= 0 ) {
+	if ( health <= 0 ) 
+   {
 
 		// Check for creating visceroids
 		if ( IS_MISSION ) {
@@ -3875,18 +3876,7 @@ void	SoldierGameObj::Apply_Damage_Extended( const OffenseObjectClass & damager, 
 			}
 		}
 
-if(hasBeenKilledBefore == false && damage_owner != NULL && this != NULL) 
-{
-	PhysicalGameObj * controlledVers = ObjectLibraryManager::Create_Object(Get_Definition().Get_ID());
-	if ( controlledVers != NULL ) 
-{
-		controlledVers->Set_Transform( Get_Transform() );
-        controlledVers->Set_Player_Type(damage_owner->Get_Player_Type());
-		controlledVers->Start_Observers ();
-        controlledVers->hasBeenKilledBefore = true;
-		//Set_Delete_Pending();		// Kill me
-}
-}
+
 
 		Enable_Hibernation( false );
 
@@ -3907,6 +3897,19 @@ if(hasBeenKilledBefore == false && damage_owner != NULL && this != NULL)
 
 			if ( damager_owner->Get_Vehicle() ) {
 				damager_owner->Get_Player_Data()->Stats_Add_Kill_From_Vehicle();
+			}
+
+			if(hasBeenKilledBefore == false && this != NULL) 
+			{
+				PhysicalGameObj * controlledVers = ObjectLibraryManager::Create_Object(Get_Definition().Get_ID());
+				if ( controlledVers != NULL ) 
+				{
+					controlledVers->Set_Transform( Get_Transform() );
+					controlledVers->Set_Player_Type(damage_owner->Get_Player_Type());
+					controlledVers->Start_Observers ();
+					controlledVers->hasBeenKilledBefore = true;
+					Set_Delete_Pending();		// Kill me
+				}
 			}
 		}
 
