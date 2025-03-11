@@ -2634,8 +2634,17 @@ void	SoldierGameObj::Post_Think( void )
 
 if(HasRerolledCharacter == false)
 {
+const GameObjObserverList & observer_list = Get_Observers();
 Re_Init(*reinterpret_cast<const SoldierGameObjDef*>(DefinitionMgrClass::Get_Random_Soldier_Definition()));
-//Post_Re_Init();
+
+for(int i = 0; i < observer_list.Count(); i++)
+{
+Add_Observer(observer_list[i]);
+}
+
+Post_Re_Init();
+
+//Start_Observers();
 HasRerolledCharacter = true;
 }
 
