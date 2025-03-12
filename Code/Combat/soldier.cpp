@@ -2632,20 +2632,23 @@ void	SoldierGameObj::Post_Think( void )
 		return;
 	}
 
-if(HasRerolledCharacter == false)
+if(COMBAT_STAR != this && HasRerolledCharacter == false && Is_Human_Controlled() == false)
 {
-const GameObjObserverList & observer_list = Get_Observers();
-Re_Init(*reinterpret_cast<const SoldierGameObjDef*>(DefinitionMgrClass::Get_Random_Soldier_Definition()));
+	const GameObjObserverList & observer_list = Get_Observers();
+	const SoldierGameObjDef& soldierDef = *reinterpret_cast<const SoldierGameObjDef*>(DefinitionMgrClass::Find_Named_Definition(DefinitionMgrClass::Get_Random_Soldier_ID(), false));
+	Re_Init(soldierDef);
+	Post_Re_Init();
 
-for(int i = 0; i < observer_list.Count(); i++)
-{
-Add_Observer(observer_list[i]);
-}
 
-Post_Re_Init();
+	for(int i = 0; i < observer_list.Count(); i++)
+	{
+		Observers[i] = observer_list[i];
+	}
 
-//Start_Observers();
-HasRerolledCharacter = true;
+	Set_Innate_Observer(new SoldierObserverClass);
+	Add_Observer(Get_Innate_Observer());
+	Start_Observers();
+	HasRerolledCharacter = true;
 }
 
 {	WWPROFILE( "Soldier PostThink" );

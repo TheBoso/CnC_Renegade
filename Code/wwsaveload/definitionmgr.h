@@ -70,6 +70,10 @@ class DefinitionMgrClass : public SaveLoadSubSystemClass
 {
 public:
 
+//static const char* characterIDs[];
+//static const char* vehicleIDs[];
+
+
 	/////////////////////////////////////////////////////////////////////
 	//	Public constructors/destructors
 	/////////////////////////////////////////////////////////////////////
@@ -109,6 +113,7 @@ public:
 	static DefinitionClass *	Get_Next (DefinitionClass *curr_def);
 	static DefinitionClass *	Get_Next (DefinitionClass *curr_def, uint32 id, ID_TYPE type = ID_CLASS);
 
+
 	static void						Free_Definitions (void);
 
    //
@@ -117,7 +122,10 @@ public:
    static DefinitionClass* Get_Random_Definition (void);
    static DefinitionClass* Get_Random_Soldier_Definition(void);
 	static DefinitionClass* Get_Random_Vehicle_Definition(void);
-    
+
+    static const char* Get_Random_Soldier_ID(void);
+	static const char* Get_Random_Vehicle_ID(void);
+
 
 
 protected:
@@ -153,6 +161,8 @@ private:
 	static DefinitionClass **	_SortedDefinitionArray;
 	static int						_MaxDefinitionCount;
 	static int						_DefinitionCount;
+    static const char*              characterIDs[];
+	static const char*              vehicleIDs[];
 
 	/////////////////////////////////////////////////////////////////////
 	//	Friend classes
