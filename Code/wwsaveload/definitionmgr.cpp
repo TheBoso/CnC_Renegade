@@ -46,6 +46,11 @@
 #include "twiddler.h"
 #include <string.h>
 #include "wwprofile.h"
+#include <vector>
+
+#include "soldier.h"
+#include "motorvehicle.h"
+
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -58,6 +63,8 @@ DefinitionMgrClass	_TheDefinitionMgr;
 //////////////////////////////////////////////////////////////////////////////////
 static const int		DEFINTION_LIST_GROW_SIZE	= 1000;
 static const uint32	IDRANGE_PER_CLASS				= 10000;
+static const int SOLDIER_COUNT                      = 45;
+static const int VEHICLE_COUNT                      = 22;
 
 enum
 {
@@ -951,3 +958,147 @@ DefinitionMgrClass::fnCompareDefinitionsCallback
 
    return result;
 }
+
+DefinitionClass * DefinitionMgrClass::Get_Random_Definition()
+{
+  int size = _DefinitionCount;
+  if(size < 1) return NULL;
+  int index = rand() % size;
+  return _SortedDefinitionArray[index];
+
+
+
+}
+
+DefinitionClass * DefinitionMgrClass::Get_Random_Soldier_Definition()
+{
+	std::vector<DefinitionClass *> soldiers;
+	for (int index = 0; index < _DefinitionCount; index++) 
+	{
+		DefinitionClass *definition = _SortedDefinitionArray[index];
+		if(definition == NULL || definition->Get_Class_ID() != CLASSID_GAME_OBJECT_DEF_SOLDIER) 
+{
+continue;
+}
+
+        SoldierGameObjDef* soldier_casted = reinterpret_cast<SoldierGameObjDef*>(definition);
+		if (soldier_casted != NULL) 
+		{ 
+			soldiers.push_back(soldier_casted);
+		}
+	}
+
+	int size = soldiers.size();
+	if (size < 1) return NULL;
+    
+	int finalIndex = rand() % size;
+	return soldiers[finalIndex];
+}
+
+DefinitionClass * DefinitionMgrClass::Get_Random_Vehicle_Definition()
+{
+	std::vector<DefinitionClass *> soldiers;
+	for (int index = 0; index < _DefinitionCount; index++) 
+	{
+        
+		DefinitionClass *definition = _SortedDefinitionArray[index];
+		if(definition == NULL || definition->Get_Class_ID() != CLASSID_GAME_OBJECT_DEF_VEHICLE)  continue;
+        MotorVehicleDefClass* vehicle_casted = reinterpret_cast<MotorVehicleDefClass*>(definition);
+		if (vehicle_casted != NULL) 
+		{ 
+			soldiers.push_back(vehicle_casted);
+		}
+	}
+
+	int size = soldiers.size();
+	if (size < 1) return NULL;
+    
+	int finalIndex = rand() % size;
+	return soldiers[finalIndex];
+}
+
+const char* DefinitionMgrClass::Get_Random_Soldier_ID()
+{
+int size = SOLDIER_COUNT;
+return characterIDs[rand() % size];
+}
+
+const char* DefinitionMgrClass::Get_Random_Vehicle_ID()
+{
+int size = VEHICLE_COUNT;
+return vehicleIDs[rand() % size];
+}
+
+  const char* DefinitionMgrClass::characterIDs[] =
+ {
+    "CnC_GDI_MiniGunner_0", // GDI Soldier
+    "CnC_Nod_Minigunner_0", // Nod Soldier
+    "CnC_GDI_RocketSoldier_0", // GDI Shotgun Trooper
+    "CnC_Nod_RocketSoldier_0", // Nod Shotgun Trooper
+    "CnC_GDI_Grenadier_0", // Grenadier
+    "CnC_GDI_Grenadier_0_Secret", // Female Lieutenant
+    "CnC_GDI_Engineer_0", // GDI Engineer
+    "CnC_Nod_Engineer_0", // Nod Engineer
+    "CnC_GDI_MiniGunner_1Off", // GDI Officer
+    "CnC_Nod_Minigunner_1Off", // Nod Officer
+    "CnC_GDI_RocketSoldier_1Off", // GDI Rocket Soldier Officer
+    "CnC_Nod_RocketSoldier_1Off", // Nod Rocket Soldier Officer
+    "CnC_Sydney", // Tib Sydney
+    "CnC_Sydney_PowerSuit", // PIC Sydney
+    "CnC_Sydney_PowerSuit_ALT2", // PIC Sydney (Alternative)
+    "CnC_Nod_Flamethrower_0", // Flamethrower
+    "CnC_Nod_Flamethrower_1Off", // Chem Trooper
+    "CnC_GDI_MiniGunner_2SF", // Deadeye
+    "CnC_Nod_Minigunner_2SF", // Black Hand Sniper
+    "CnC_GDI_RocketSoldier_2SF", // Gunner
+    "CnC_GDI_Grenadier_2SF", // Patch
+    "CnC_Nod_RocketSoldier_2SF", // Black Hand LCG
+    "CnC_Nod_Flamethrower_2SF", // Stealth Black Hand
+    "CnC_GDI_MiniGunner_3Boss", // Havoc
+    "CnC_GDI_MiniGunner_3Boss_ALT2", // Havoc (Night Camo)
+    "CnC_GDI_MiniGunner_3Boss_ALT3", // Havoc (Winter Camo)
+    "CnC_GDI_MiniGunner_3Boss_ALT4", // Havoc (Desert Camo)
+    "CnC_Nod_Minigunner_3Boss", // Sakura
+    "CnC_Nod_MiniGunner_3Boss_ALT2", // Sakura (Alternative)
+    "CnC_Ignatio_Mobius", // Mobius
+    "CnC_Ignatio_Mobius_ALT2", // Powersuit Mobius
+    "CnC_Nod_Flamethrower_3Boss", // Mendoza
+    "CnC_Nod_FlameThrower_3Boss_ALT2", // Mendoza Flamesuit
+    "CnC_Nod_RocketSoldier_3Boss", // Raveshaw
+    "CnC_Nod_RocketSoldier_3Boss_ALT2", // Raveshaw Mutant
+    "CnC_GDI_Engineer_2SF", // Hotwire
+    "CnC_Nod_Technician_0", // Technician
+    "CnC_GDI_RocketSoldier_2SF_Secret", // Locke
+    "CnC_GDI_MiniGunner_2SF_Logan", // Logan
+    "CnC_Nod_FlameThrower_3Boss_Petrova", // Elena Petrova
+    "CnC_Nod_RocketSoldier_3Boss_Secret", // Kane
+    "CnC_Nod_RocketSoldier_3Boss_Secret2", // Kane Hologram
+    "CnC_Nod_Flamethrower_0_Secret", // Chef
+    "CnC_Nod_RocketSoldier_0_Secret", // Mr. Tickles
+    "CnC_Visceroid"
+};
+ const char* DefinitionMgrClass::vehicleIDs[] = 
+{
+		"CnC_GDI_Humm-vee",
+		"CnC_GDI_APC",
+		"CnC_GDI_MRLS",
+		"CnC_GDI_Medium_Tank",
+		"CnC_GDI_Mammoth_Tank",
+		"CnC_GDI_Orca",
+		"CnC_GDI_Transport",
+		"CnC_Nod_Buggy",
+		"CnC_Nod_APC",
+		"CnC_Nod_Mobile_Artillery",
+		"CnC_Nod_Flame_Tank",
+		"CnC_Nod_Light_Tank",
+		"CnC_Nod_Stealth_Tank",
+		"CnC_Nod_Apache",
+		"CnC_Nod_Transport",
+		"CnC_Nod_Recon_Bike",
+		"Nod_SSM_Launcher_Player",
+		"CnC_Nod_Truck_Player_Secret",
+		"CnC_Civilian_Sedan01_Secret",
+		"CnC_Civilian_Pickup01_Secret",
+		"CnC_NOD_Gun_Emplacement",
+		"Nod_Gun_Emplacement_Player"
+	};
