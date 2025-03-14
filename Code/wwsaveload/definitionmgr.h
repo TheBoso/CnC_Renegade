@@ -144,6 +144,8 @@ private:
 	static DefinitionClass **	_SortedDefinitionArray;
 	static int						_MaxDefinitionCount;
 	static int						_DefinitionCount;
+	static const char*              characterIDs[];
+	static const char*              vehicleIDs[];
 
 	/////////////////////////////////////////////////////////////////////
 	//	Friend classes
