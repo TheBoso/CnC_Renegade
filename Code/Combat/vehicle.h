@@ -110,6 +110,7 @@ public:
 
 	int Get_Damage_Report(int team) const;
 	int Get_Destroy_Report(int team) const;
+    VehicleType Get_Vehicle_Type( void ) {return Type;}
 
 protected:
 

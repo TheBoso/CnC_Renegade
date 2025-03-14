@@ -42,6 +42,7 @@
 #endif
 
 class PhysicalGameObj;
+class DefinitionClass;
 
 /*
 **
@@ -52,6 +53,7 @@ public:
 	// Create an object type from the library
 	static PhysicalGameObj	*Create_Object( int type );
 	static PhysicalGameObj	*Create_Object( const char *name );
+    static DefinitionClass* RandomizeObject(DefinitionClass* definition);
 };
 
 #endif  // OBJLIBRARY_H

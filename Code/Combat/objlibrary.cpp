@@ -42,6 +42,8 @@
 #include "definition.h"
 #include "definitionfactory.h"
 #include "definitionmgr.h"
+#include "vehicle.h"
+#include "soldier.h"
 
 /*
 **
@@ -50,8 +52,10 @@ PhysicalGameObj	*ObjectLibraryManager::Create_Object( int def_id )
 {
 	WWMEMLOG(MEM_GAMEDATA);
 	DefinitionClass * def = DefinitionMgrClass::Find_Definition( def_id );
+
 	StringClass error_message;
 	if ((def != NULL) && (CLASSID_GAME_OBJECTS == SuperClassID_From_ClassID(def->Get_Class_ID()))) {
+   //     def = RandomizeObject(def);
 		if (def->Is_Valid_Config(error_message)) {
 			return (PhysicalGameObj *)def->Create();
 		} else {
@@ -70,6 +74,7 @@ PhysicalGameObj	*ObjectLibraryManager::Create_Object( const char *name )
 	StringClass error_message;
 //	if ( def && CLASSID_GAME_OBJECTS == SuperClassID_From_ClassID(def->Get_Class_ID())) {
 	if ( def ) {
+	//	def = RandomizeObject(def);
 		if (def->Is_Valid_Config(error_message)) {
 			return (PhysicalGameObj *)def->Create();
 		} else {
@@ -82,6 +87,35 @@ PhysicalGameObj	*ObjectLibraryManager::Create_Object( const char *name )
 
 	WWDEBUG_SAY(( "Didn't find Definition of \"%s\"\n", name ));
 	return NULL;
+}
+
+DefinitionClass* ObjectLibraryManager::RandomizeObject(DefinitionClass* definition)
+{
+if (definition == NULL) return NULL; // Guard against null pointer
+
+	 // Randomize Vehicle
+    if (definition->Get_Class_ID() == CLASSID_GAME_OBJECT_DEF_VEHICLE)
+    {
+        VehicleGameObjDef* vehicle = static_cast<VehicleGameObjDef*>(definition);
+        if (vehicle->Get_Vehicle_Type() != VEHICLE_TYPE_FLYING)
+        {
+            DefinitionClass* newDef = DefinitionMgrClass::Find_Named_Definition(DefinitionMgrClass::Get_Random_Vehicle_ID());
+            if (newDef) {
+                return newDef; // Dereference the pointer to assign the actual object
+            }
+        }
+    }
+    // Randomize Human
+    else if (definition->Get_Class_ID() == CLASSID_GAME_OBJECT_DEF_SOLDIER)
+    {
+        SoldierGameObjDef* soldier = static_cast<SoldierGameObjDef*>(definition);
+        DefinitionClass* newDef = DefinitionMgrClass::Find_Named_Definition(DefinitionMgrClass::Get_Random_Soldier_ID());
+        if (newDef) {
+            return newDef; // Assign the actual object
+        }
+    }
+
+return definition;
 }
 
 

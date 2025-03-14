@@ -63,7 +63,7 @@ DefinitionMgrClass	_TheDefinitionMgr;
 //////////////////////////////////////////////////////////////////////////////////
 static const int		DEFINTION_LIST_GROW_SIZE	= 1000;
 static const uint32	IDRANGE_PER_CLASS				= 10000;
-static const int SOLDIER_COUNT                      = 45;
+static const int SOLDIER_COUNT                      = 51;
 static const int VEHICLE_COUNT                      = 22;
 
 enum
@@ -1075,7 +1075,14 @@ return vehicleIDs[rand() % size];
     "CnC_Nod_RocketSoldier_3Boss_Secret2", // Kane Hologram
     "CnC_Nod_Flamethrower_0_Secret", // Chef
     "CnC_Nod_RocketSoldier_0_Secret", // Mr. Tickles
-    "CnC_Visceroid"
+    "CnC_Visceroid",
+    "CnC_GDI_Mutant_0_Mutant",
+    "CnC_Nod_Mutant_0_Mutant",
+    "CnC_GDI_Mutant_1Off_Acolyte",
+"CnC_Nod_Mutant_1Off_Acolyte",
+"CnC_GDI_Mutant_2SF_Templar",
+"CnC_Nod_Mutant_2SF_Templar"
+
 };
  const char* DefinitionMgrClass::vehicleIDs[] = 
 {

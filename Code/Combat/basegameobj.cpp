@@ -46,6 +46,8 @@
 #include "matinfo.h"
 #include "definitionclassids.h"
 #include "networkobjectfactory.h"
+#include "vehicle.h"
+#include "soldier.h"
 
 
 //////////////////////////////////////////////////////////////
@@ -87,6 +89,7 @@ NetworkGameObjectFactoryClass::Create (cPacket &packet) const
 	//	Lookup the definition for this object
 	//
 	DefinitionClass *definition = DefinitionMgrClass::Find_Definition (definition_id);
+
 	WWASSERT (definition != NULL);
 
 	//
@@ -229,9 +232,11 @@ bool	BaseGameObj::Load( ChunkLoadClass &cload )
 				LOAD_MICRO_CHUNK( cload, definition_id );
 				WWASSERT( Definition == NULL );
 				Definition = (const BaseGameObjDef*)DefinitionMgrClass::Find_Definition( definition_id );
+				
 				if ( Definition == NULL ) {
 					Debug_Say(( "Definition %d not found\n.  Re-Export needed\n", definition_id ));
 				}
+               
 
 				//
 				// 07/30/01 attempting to load a level with temps will presently assert here.
