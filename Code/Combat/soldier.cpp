@@ -99,6 +99,7 @@
 #include "ffactory.h"
 #include "realcrc.h"
 #include "colmathaabox.h" // Agressive inlining causes linker issues if this isn't here.
+#include "GameMaster.h"
 
 /*
 **
@@ -1986,6 +1987,12 @@ void SoldierGameObj::Apply_Control( void )
 
 		if ( !transition_triggered ) {
 			if ( action_triggered ) {
+				 
+                //  Pressed E while looking at nothing
+				if (GameMaster::IsPossessingOther())
+				{
+					GameMaster::RevertToMasterObject();
+				}
 
 				//
 				//	Lookup the current target
@@ -1999,6 +2006,14 @@ void SoldierGameObj::Apply_Control( void )
 						physical_target->Get_Position( &target_pos );
 						Vector3 my_pos;
 						Get_Position( &my_pos );
+
+                       //  We pressed E while in GameMaster mode
+                        if(GameMaster::IsGameMaster() && GameMaster::IsPossessingOther() == false)
+                          {
+                            GameMaster::ControlObject(physical_target);
+                          
+                          }
+               
 
 						//
 						//	Check to see if the target is within the "poke" range

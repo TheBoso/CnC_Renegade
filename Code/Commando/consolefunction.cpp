@@ -3402,6 +3402,16 @@ public:
 		"gamemaster - Become the game master."; }
 	virtual	void Activate( const char * input ) 
 	{
+        if(GameMaster::IsGameMaster())
+{
+Print("No Longer GameMaster.");
+
+}
+else
+{
+	Print("Becoming GameMaster.");
+
+}
 		GameMaster::BecomeGameMaster();
 		
 	}
