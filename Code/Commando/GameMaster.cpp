@@ -22,6 +22,7 @@ void GameMaster::BecomeGameMaster(void) {
         soldier->Peek_Model()->Set_Hidden(true);
         soldier->Toggle_Fly_Mode();
         soldier->Set_Player_Type(PLAYERTYPE_SPECTATOR);
+        soldier->Set_Transform(COMBAT_STAR->Get_Transform());
         ControlObject(newPlayer);
     }
 }
@@ -37,9 +38,14 @@ void GameMaster::ControlObject(PhysicalGameObj* targetObject) {
     VehicleGameObj* vehicle = targetObject->As_VehicleGameObj();
     if (soldier != NULL)
     {
-        CombatManager::Set_The_Star(soldier);
+        ActionParamsStruct parameters;
+        soldier->Get_Action()->Follow_Input( parameters );
+
         soldier->Control_Enable (true);
         soldier->Set_Control_Owner (CombatManager::Get_My_Id ());
+        soldier->Generate_Control();
+        CombatManager::Set_The_Star(soldier);
+
     } else if (vehicle != NULL) {
         //  we probably create a new character, set the player type to whatever the
         //  vehicle is, then hijack it.
