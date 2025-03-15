@@ -160,6 +160,7 @@
 #include "specialbuilds.h"
 #include "lightsolve.h"
 #include "lightsolvecontext.h"
+#include "GameMaster.h"
 
 
 
@@ -3392,6 +3393,20 @@ public:
 	}
 };
 
+class GameMasterConsoleFunctionClass : public ConsoleFunctionClass 
+{
+public:
+	virtual	const char * Get_Name( void )	{ return "gamemaster"; }
+	const char * Get_Alias( void ) { return "gamemaster"; }
+	virtual	const char * Get_Help( void )	{ return
+		"gamemaster - Become the game master."; }
+	virtual	void Activate( const char * input ) 
+	{
+		GameMaster::BecomeGameMaster();
+		
+	}
+}; 
+
 
 class ToggleSortingConsoleFunctionClass : public ConsoleFunctionClass {
 public:
@@ -5150,7 +5165,7 @@ void	ConsoleFunctionManager::Init( void )
    //
    // SHIPPING CONSOLE FUNCTIONS ONLY
    //
-
+	FunctionList.Add(new GameMasterConsoleFunctionClass() );
 	FunctionList.Add( new GameOverConsoleFunctionClass() );
    FunctionList.Add( new AdminMessageConsoleFunctionClass() );
 	FunctionList.Add( new GameInfoConsoleFunctionClass() );
@@ -5195,6 +5210,8 @@ void	ConsoleFunctionManager::Shutdown( void )
 		FunctionList.Delete( FunctionList.Count()-1 );
 	}
 }
+
+
 
 //------------------------------------------------------------------------------------
 
