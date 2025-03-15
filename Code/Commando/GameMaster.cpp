@@ -8,10 +8,12 @@
 #include "playertype.h"
 #include "soldier.h"
 #include "vehicle.h"
+#include "soldierobserver.h"
 
 bool GameMaster::_isGameMaster = false;
 bool GameMaster::_isPossessingOther = false;
 SoldierGameObj* GameMaster::_cachedMasterSoldier;
+int GameMaster::_lastVehiclePlayerType = PLAYERTYPE_NOD;
 
 void GameMaster::BecomeGameMaster(void) {
     _isGameMaster = !_isGameMaster;
@@ -32,6 +34,7 @@ void GameMaster::InitialSetup()
     {
         PhysicalGameObj* newPlayer = ObjectLibraryManager::Create_Object("Walk-Thru");
         _cachedMasterSoldier = newPlayer->As_SoldierGameObj();
+        _cachedMasterSoldier->Enable_Ghost_Collision(true);
         _cachedMasterSoldier->Toggle_Fly_Mode();
         _cachedMasterSoldier->Set_Player_Type(PLAYERTYPE_SPECTATOR);
         _cachedMasterSoldier->Set_Transform(COMBAT_STAR->Get_Transform());
@@ -47,18 +50,20 @@ void GameMaster::ShowEditPanel(PhysicalGameObj* targetObject) {
 
 void GameMaster::ControlObject(PhysicalGameObj* targetObject)
     {
-    ReleaseControl(false);
     //  figure out if its a soldier or vehicle
     SoldierGameObj* soldier = targetObject->As_SoldierGameObj();
     VehicleGameObj* vehicle = targetObject->As_VehicleGameObj();
     if (soldier != NULL)
     {
+        ReleaseControl(false);
+        soldier->Remove_Innate_Observer();
         ActionParamsStruct parameters;
         soldier->Get_Action()->Follow_Input( parameters );
 
         soldier->Control_Enable (true);
         soldier->Set_Control_Owner (CombatManager::Get_My_Id ());
         soldier->Generate_Control();
+        soldier->Start_Observers();
         CombatManager::Set_The_Star(soldier);
 
     } else if (vehicle != NULL) 
@@ -67,8 +72,9 @@ void GameMaster::ControlObject(PhysicalGameObj* targetObject)
         //  vehicle is, then hijack it.
         if(_cachedMasterSoldier != NULL)
 {
-            _cachedMasterSoldier->Set_Player_Type(vehicle->Get_Player_Type());
-            _cachedMasterSoldier->Enter_Vehicle(vehicle, "");
+            _lastVehiclePlayerType = vehicle->Get_Player_Type();
+            _cachedMasterSoldier->Set_Player_Type(_lastVehiclePlayerType);
+            vehicle->Add_Occupant(_cachedMasterSoldier);
             vehicle->Generate_Control();
 }
     }
@@ -81,36 +87,48 @@ return _isGameMaster;
 
 bool GameMaster::IsPossessingOther()
 {
-return IsGameMaster() && COMBAT_STAR != _cachedMasterSoldier;
+return IsGameMaster() && _cachedMasterSoldier != NULL && COMBAT_STAR != _cachedMasterSoldier;
 }
 
 void GameMaster::RevertToMasterObject()
 {
+VehicleGameObj* vehicle = _cachedMasterSoldier->Get_Vehicle();
 _cachedMasterSoldier->Exit_Vehicle();
+if(vehicle != NULL)
+{
+vehicle->Set_Player_Type(_lastVehiclePlayerType);
+vehicle->Start_Observers();
+}
 _cachedMasterSoldier->Set_Player_Type(PLAYERTYPE_SPECTATOR);
 
+ReleaseControl(true);
 ControlObject(_cachedMasterSoldier);
+    _cachedMasterSoldier->Enable_Ghost_Collision(true);
+    _cachedMasterSoldier->Toggle_Fly_Mode();
 }
 
 
-void GameMaster::ReleaseControl(bool reinitAI)
+void GameMaster::ReleaseControl(bool reinitAI) {
+    SoldierGameObj* curr = COMBAT_STAR;
+    if (_cachedMasterSoldier != NULL) {
+        _cachedMasterSoldier->Set_Transform(curr->Get_Transform());
+    }
+    if (reinitAI) {
+        cGod::Reinitialize_Ai_On_Star();
+        SoldierObserverClass* innate_ai = curr->Get_Innate_Controller();
+        if (innate_ai == NULL)
 {
-SoldierGameObj* curr = COMBAT_STAR;
-if(curr != _cachedMasterSoldier && _cachedMasterSoldier != NULL)
-{
-_cachedMasterSoldier->Set_Transform(curr->Get_Transform());
-}
-    if(reinitAI)
-{
-    cGod::Reinitialize_Ai_On_Star();
-}
-    curr->Set_Control_Owner(-1);
-    curr->Generate_Control();
-    if(curr != _cachedMasterSoldier)
-{
+            curr->Set_Innate_Observer(new SoldierObserverClass());
+            curr->Add_Observer(curr->Get_Innate_Observer());
+} 
+    }
+    if (curr != _cachedMasterSoldier) {
+        curr->Set_Control_Owner(-1);
+        curr->Generate_Control();
+
         curr->Peek_Model()->Set_Hidden(false);
-}
-curr->Start_Observers();
+    }
+    curr->Start_Observers();
 }
 
 bool GameMaster::IsInVehicle()
@@ -121,4 +139,13 @@ return false;
 }
 
 return _cachedMasterSoldier->Get_Vehicle() != NULL;
+}
+
+void GameMaster::Think()
+{
+return;
+if(_isGameMaster == true && IsPossessingOther() == false && IsInVehicle() == false)
+{
+_cachedMasterSoldier->Set_Player_Type(PLAYERTYPE_SPECTATOR);
+}
 }

@@ -2304,8 +2304,10 @@ void	SoldierGameObj::Think( void )
 {
 	{	WWPROFILE( _profile_name );
 
-		if ( this == COMBAT_STAR ) {
-			_shake_delay -= TimeManager::Get_Frame_Seconds();
+		if ( this == COMBAT_STAR ) 
+        {
+		    GameMaster::Think();
+           	_shake_delay -= TimeManager::Get_Frame_Seconds();
 			_cry_delay -= TimeManager::Get_Frame_Seconds();
 		}
 		/*
@@ -5290,7 +5292,16 @@ void	SoldierGameObj::Update_Locked_Facing( void )
 
 
 
+void SoldierGameObj::Remove_Innate_Observer(void)
+{
+	SoldierObserverClass *	observer = Get_Innate_Observer ();
+    if(observer != NULL)
+{
+		Remove_Observer(observer);
+    	Clear_Innate_Observer();
+}
 
+}
 
 
 

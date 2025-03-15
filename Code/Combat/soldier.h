@@ -133,7 +133,9 @@ public:
 	void	Copy_Settings( const SoldierGameObjDef & definition );
 	void	Re_Init( const SoldierGameObjDef & definition );
 	const SoldierGameObjDef & Get_Definition( void ) const ;
+	void                    Remove_Innate_Observer( void );
 
+	
 	// Save / Load / Construction Factory
 	virtual	bool	Save( ChunkSaveClass & csave );
 	virtual	bool	Load( ChunkLoadClass & cload );
@@ -435,6 +437,7 @@ protected:
 	static bool				DisplayDebugBoxForGhostCollision;
 
 	int						Check(void);
+
 
 };
 

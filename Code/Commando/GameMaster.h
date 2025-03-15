@@ -15,11 +15,13 @@ class GameMaster
     static bool IsGameMaster();
     static bool IsPossessingOther();
     static void RevertToMasterObject();
+    static void Think();
 static bool IsInVehicle();
     
     private:
     static bool _isGameMaster;
     static SoldierGameObj* _cachedMasterSoldier;
+    static int _lastVehiclePlayerType;
     static bool _isPossessingOther;
     static void InitialSetup();
 

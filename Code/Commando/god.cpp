@@ -46,6 +46,7 @@
 #include "wolgmode.h"
 #include "specialbuilds.h"
 #include "demosupport.h"
+#include "GameMaster.h"
 
 /*
 **
@@ -472,6 +473,8 @@ void cGod::Exit( void )
 
 void cGod::Star_Killed( void )
 {
+    //  Who cares if Master
+    if(GameMaster::IsGameMaster()) return;
 	if ( State == GOD_STATE_SINGLE_RUNNING ) {
 		State = GOD_STATE_SINGLE_DEAD;
 		WWDEBUG_SAY(( "Star Killed\n" ));
@@ -549,7 +552,7 @@ void cGod::Load_Game( void )
 
 void cGod::Mission_Failed( void )
 {
-	if ( State == GOD_STATE_SINGLE_RUNNING ) {
+	if ( State == GOD_STATE_SINGLE_RUNNING && GameMaster::IsGameMaster() == false ) {
 		State = GOD_STATE_SINGLE_DEAD;
 		WWDEBUG_SAY(( "Mission Failed\n" ));
 
