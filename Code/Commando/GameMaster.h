@@ -4,16 +4,13 @@
 
 class PhysicalGameObj;
 class GameMaster
-{
+{ 
     public:
     static void BecomeGameMaster(void);
     static void ControlObject(PhysicalGameObj* targetObject);
     static void ShowEditPanel(PhysicalGameObj* targetObject);
 
-    static bool IsGameMaster()
-    {
-        return _isGameMaster;
-    }
+    static bool IsGameMaster();
     
     private:
     static bool _isGameMaster;

@@ -387,9 +387,7 @@ SoldierGameObj * cGod::Create_Commando(int client_id, int player_type/*, int mod
 		CheatMgrClass::Get_Instance()->Apply_Cheats();
 
 
-#ifdef WWDEBUG
 		Reinitialize_Ai_On_Star();
-#endif // WWDEBUG
 	}
 
 	return p_soldier;
@@ -428,7 +426,6 @@ void cGod::Create_Grunt(Vector3 & pos)
 }
 
 //-----------------------------------------------------------------------------
-#ifdef WWDEBUG
 void cGod::Reinitialize_Ai_On_Star(void)
 {
 	WWASSERT(cNetwork::I_Am_Client());
@@ -458,8 +455,7 @@ void cGod::Reinitialize_Ai_On_Star(void)
 		CombatManager::Set_Is_Star_Determining_Target(true);
 	}
 }
-#endif // WWDEBUG
-
+	
 //-----------------------------------------------------------------------------
 Matrix3D		_StarRespawnTM;
 InventoryClass	_DeathInventory;

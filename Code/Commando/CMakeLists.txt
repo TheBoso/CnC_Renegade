@@ -420,6 +420,8 @@ set(COMMANDO_SRC
     modpackage.h
     modpackagemgr.cpp
     modpackagemgr.h
+    GameMaster.h
+    GameMaster.cpp
 )
 
 # Common stuff for both client and server builds.
