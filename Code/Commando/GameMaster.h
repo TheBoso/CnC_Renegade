@@ -15,6 +15,7 @@ class GameMaster
     static bool IsGameMaster();
     static bool IsPossessingOther();
     static void RevertToMasterObject();
+static bool IsInVehicle();
     
     private:
     static bool _isGameMaster;

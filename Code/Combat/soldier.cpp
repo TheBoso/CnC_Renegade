@@ -1989,7 +1989,7 @@ void SoldierGameObj::Apply_Control( void )
 			if ( action_triggered ) {
 				 
                 //  Pressed E while looking at nothing
-				if (GameMaster::IsPossessingOther())
+				if (GameMaster::IsPossessingOther() || GameMaster::IsInVehicle())
 				{
 					GameMaster::RevertToMasterObject();
 				}

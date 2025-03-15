@@ -7,6 +7,7 @@
 #include "soldier.h"
 #include "playertype.h"
 #include "soldier.h"
+#include "vehicle.h"
 
 bool GameMaster::_isGameMaster = false;
 bool GameMaster::_isPossessingOther = false;
@@ -60,9 +61,16 @@ void GameMaster::ControlObject(PhysicalGameObj* targetObject)
         soldier->Generate_Control();
         CombatManager::Set_The_Star(soldier);
 
-    } else if (vehicle != NULL) {
+    } else if (vehicle != NULL) 
+    {
         //  we probably create a new character, set the player type to whatever the
         //  vehicle is, then hijack it.
+        if(_cachedMasterSoldier != NULL)
+{
+            _cachedMasterSoldier->Set_Player_Type(vehicle->Get_Player_Type());
+            _cachedMasterSoldier->Enter_Vehicle(vehicle, "");
+            vehicle->Generate_Control();
+}
     }
 }
 
@@ -78,6 +86,9 @@ return IsGameMaster() && COMBAT_STAR != _cachedMasterSoldier;
 
 void GameMaster::RevertToMasterObject()
 {
+_cachedMasterSoldier->Exit_Vehicle();
+_cachedMasterSoldier->Set_Player_Type(PLAYERTYPE_SPECTATOR);
+
 ControlObject(_cachedMasterSoldier);
 }
 
@@ -85,10 +96,29 @@ ControlObject(_cachedMasterSoldier);
 void GameMaster::ReleaseControl(bool reinitAI)
 {
 SoldierGameObj* curr = COMBAT_STAR;
+if(curr != _cachedMasterSoldier && _cachedMasterSoldier != NULL)
+{
+_cachedMasterSoldier->Set_Transform(curr->Get_Transform());
+}
     if(reinitAI)
 {
     cGod::Reinitialize_Ai_On_Star();
 }
-    curr->Set_Control_Owner(SmartGameObj::SERVER_CONTROL_OWNER);
+    curr->Set_Control_Owner(-1);
     curr->Generate_Control();
+    if(curr != _cachedMasterSoldier)
+{
+        curr->Peek_Model()->Set_Hidden(false);
+}
+curr->Start_Observers();
+}
+
+bool GameMaster::IsInVehicle()
+{
+if(_cachedMasterSoldier == NULL)
+{
+return false;
+}
+
+return _cachedMasterSoldier->Get_Vehicle() != NULL;
 }
