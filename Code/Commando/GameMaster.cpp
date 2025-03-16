@@ -2,6 +2,7 @@
 #include "GameMaster.h"
 #include "combat.h"
 #include "physicalgameobj.h"
+#include "smartgameobj.h"
 #include "god.h"
 #include "objlibrary.h"
 #include "soldier.h"
@@ -12,7 +13,7 @@
 
 bool GameMaster::_isGameMaster = false;
 bool GameMaster::_isPossessingOther = false;
-SoldierGameObj* GameMaster::_cachedMasterSoldier;
+SoldierGameObj* GameMaster::_cachedMasterSoldier; //  we need to somehow clean this up
 int GameMaster::_lastVehiclePlayerType = PLAYERTYPE_NOD;
 
 void GameMaster::BecomeGameMaster(void) {
@@ -55,16 +56,19 @@ void GameMaster::ControlObject(PhysicalGameObj* targetObject)
     VehicleGameObj* vehicle = targetObject->As_VehicleGameObj();
     if (soldier != NULL)
     {
+        _cachedMasterSoldier->Control_Enable (false);
         ReleaseControl(false);
         soldier->Remove_Innate_Observer();
+
+
+       // soldier->Start_Observers();
+        soldier->Set_Control_Owner (CombatManager::Get_My_Id ());
+        soldier->Control_Enable (true);
         ActionParamsStruct parameters;
         soldier->Get_Action()->Follow_Input( parameters );
-
-        soldier->Control_Enable (true);
-        soldier->Set_Control_Owner (CombatManager::Get_My_Id ());
-        soldier->Generate_Control();
-        soldier->Start_Observers();
+        //soldier->Generate_Control();
         CombatManager::Set_The_Star(soldier);
+
 
     } else if (vehicle != NULL) 
     {
@@ -114,7 +118,7 @@ void GameMaster::ReleaseControl(bool reinitAI) {
         _cachedMasterSoldier->Set_Transform(curr->Get_Transform());
     }
     if (reinitAI) {
-        cGod::Reinitialize_Ai_On_Star();
+      //  cGod::Reinitialize_Ai_On_Star();
         SoldierObserverClass* innate_ai = curr->Get_Innate_Controller();
         if (innate_ai == NULL)
 {
@@ -123,10 +127,8 @@ void GameMaster::ReleaseControl(bool reinitAI) {
 } 
     }
     if (curr != _cachedMasterSoldier) {
-        curr->Set_Control_Owner(-1);
+        curr->Set_Control_Owner(SmartGameObj::SERVER_CONTROL_OWNER);
         curr->Generate_Control();
-
-        curr->Peek_Model()->Set_Hidden(false);
     }
     curr->Start_Observers();
 }
@@ -148,4 +150,9 @@ if(_isGameMaster == true && IsPossessingOther() == false && IsInVehicle() == fal
 {
 _cachedMasterSoldier->Set_Player_Type(PLAYERTYPE_SPECTATOR);
 }
+}
+
+SoldierGameObj* GameMaster::TryGetCachedSoldier()
+{
+return _cachedMasterSoldier;
 }

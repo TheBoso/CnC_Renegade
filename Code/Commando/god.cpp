@@ -474,7 +474,11 @@ void cGod::Exit( void )
 void cGod::Star_Killed( void )
 {
     //  Who cares if Master
-    if(GameMaster::IsGameMaster()) return;
+    if(GameMaster::IsGameMaster())
+{
+GameMaster::RevertToMasterObject();
+return;
+}
 	if ( State == GOD_STATE_SINGLE_RUNNING ) {
 		State = GOD_STATE_SINGLE_DEAD;
 		WWDEBUG_SAY(( "Star Killed\n" ));

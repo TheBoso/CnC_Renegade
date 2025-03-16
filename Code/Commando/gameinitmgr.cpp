@@ -88,6 +88,7 @@
 #include "ini.h"
 #include "dazzle.h"
 #include "scripts.h"
+#include "GameMaster.h"
 
 
 
@@ -132,6 +133,7 @@ GameInitMgrClass::Start_Game (const char *map_name, int teamChoice, unsigned lon
 	WWASSERT(map_name != NULL);
    WWDEBUG_SAY (("GameInitMgrClass::Start_Game(%s)\n", map_name));
 
+
 	// NOTE: Multi-play does not need this fix because it does not sound page swap.
 	if (IS_SOLOPLAY) {
 	
@@ -152,6 +154,13 @@ GameInitMgrClass::Start_Game (const char *map_name, int teamChoice, unsigned lon
 		}
 	}
 
+
+	if(GameMaster::TryGetCachedSoldier() != NULL)
+	{
+		GameMaster::TryGetCachedSoldier()->Set_Delete_Pending();
+	}
+
+
 	//
 	// Kill off any old suspended game
 	//
@@ -159,6 +168,7 @@ GameInitMgrClass::Start_Game (const char *map_name, int teamChoice, unsigned lon
 		End_Game ();
 		GameModeManager::Safely_Deactivate ();
 	}
+
 
 	//
 	//	Set the map name

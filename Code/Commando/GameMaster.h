@@ -17,6 +17,7 @@ class GameMaster
     static void RevertToMasterObject();
     static void Think();
 static bool IsInVehicle();
+static SoldierGameObj* TryGetCachedSoldier();
     
     private:
     static bool _isGameMaster;

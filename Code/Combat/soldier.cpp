@@ -5294,12 +5294,12 @@ void	SoldierGameObj::Update_Locked_Facing( void )
 
 void SoldierGameObj::Remove_Innate_Observer(void)
 {
-	SoldierObserverClass *	observer = Get_Innate_Observer ();
-    if(observer != NULL)
-{
-		Remove_Observer(observer);
-    	Clear_Innate_Observer();
-}
+	const GameObjObserverList & observer_list = Get_Observers();
+		for (int index = 0; index < observer_list.Count(); index++) {
+			if (stricmp(observer_list[index]->Get_Name(), "Innate Soldier")) {
+				Remove_Observer(observer_list[index]);
+			}
+		}
 
 }
 
