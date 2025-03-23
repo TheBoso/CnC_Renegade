@@ -2,6 +2,8 @@
 #pragma once
 #endif
 
+class Vector3;
+class DefinitionClass;
 class PhysicalGameObj;
 class SoldierGameObj;
 
@@ -16,8 +18,10 @@ class GameMaster
     static bool IsPossessingOther();
     static void RevertToMasterObject();
     static void Think();
+    static void SpawnObject(Vector3& pos);
 static bool IsInVehicle();
 static SoldierGameObj* TryGetCachedSoldier();
+    static void SetSelectedDef(DefinitionClass* def);
     
     private:
     static bool _isGameMaster;
@@ -25,6 +29,7 @@ static SoldierGameObj* TryGetCachedSoldier();
     static int _lastVehiclePlayerType;
     static bool _isPossessingOther;
     static void InitialSetup();
+    static DefinitionClass* _selectedDefinition;
 
 
 };  

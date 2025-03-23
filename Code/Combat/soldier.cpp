@@ -1973,6 +1973,17 @@ void SoldierGameObj::Apply_Control( void )
 		DIAG_LOG(( "ACPR", "%1.2f; %1.2f; %1.2f", pos.X, pos.Y, pos.Z ));
 	}
 
+	if (this == COMBAT_STAR && Control.Get_Boolean(ControlClass::BOOLEAN_WEAPON_FIRE_PRIMARY)
+		&& GameMaster::IsPossessingOther() == false)
+	{
+		Vector3 myPos;
+		this->Get_Position(&myPos);
+
+		myPos.Z += 3.0f;
+
+		GameMaster::SpawnObject(myPos);
+	}
+
 
 	if (	CombatManager::I_Am_Server() ||
 			(Is_Controlled_By_Me() && TransitionCompletionData == NULL) )
@@ -1988,12 +1999,13 @@ void SoldierGameObj::Apply_Control( void )
 		if ( !transition_triggered ) {
 			if ( action_triggered ) {
 				 
+				/*
                 //  Pressed E while looking at nothing
 				if (GameMaster::IsPossessingOther() || GameMaster::IsInVehicle())
 				{
 					GameMaster::RevertToMasterObject();
 				}
-
+				*/
 				//
 				//	Lookup the current target
 				//

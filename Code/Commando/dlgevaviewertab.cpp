@@ -46,6 +46,7 @@
 #include "listctrl.h"
 #include "dialogtext.h"
 #include "assets.h"
+#include "GameMaster.h"
 #include "ini.h"
 #include "inisup.h"
 #include "listnode.h"
@@ -302,6 +303,7 @@ EvaViewerTabClass::View_Entry (int entry_index)
 		anim_name	= object->Get_Anim_Name ();
 		min_dist		= object->Get_Min_Distance ();
 		definition_name = object->Get_Definition_Name ();
+		GameMaster::SetSelectedDef(DefinitionMgrClass::Find_Typed_Definition (definition_name, CLASSID_GAME_OBJECTS));
 	}
 
 	//
@@ -330,6 +332,8 @@ EvaViewerTabClass::View_Entry (int entry_index)
 			//
 			DefinitionClass *definition = DefinitionMgrClass::Find_Typed_Definition (definition_name, CLASSID_GAME_OBJECTS);
 			if (definition != NULL) {
+
+				
 				
 				PhysicalGameObj *game_obj = (PhysicalGameObj *)definition->Create ();
 				if (game_obj != NULL) {
