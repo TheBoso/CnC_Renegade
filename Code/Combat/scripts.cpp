@@ -82,12 +82,12 @@ void ScriptManager::Init(void)
 #else
 	#ifdef	WWDEBUG		// DEBUG and PROFILE
 		if ( DebugManager::Load_Debug_Scripts() ) {
-			Load_Scripts("SCRIPTSD.DLL");		// DEBUG
+			Load_Scripts("SCRIPTS.DLL");		// DEBUG
 		} else {
 	#ifdef	NDEBUG		// PROFILE
 			Load_Scripts("SCRIPTSP.DLL");		// PROFILE
 	#else
-			Load_Scripts("SCRIPTSD.DLL");		// DEBUG
+			Load_Scripts("SCRIPTS.DLL");		// DEBUG
 	#endif
 		}
 	#else
