@@ -504,6 +504,7 @@ if(RENEGADE_CLIENT) # Full game client
 
     target_link_libraries(renegade PRIVATE
         commando
+        imgui
     )
 
     target_sources(renegade PRIVATE ${COMMANDO_SRC})

@@ -48,6 +48,40 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(gamespy)
 
+# Add FetchContent for ImGui
+include(FetchContent)
+
+# Fetch ImGui
+FetchContent_Declare(
+    imgui
+    GIT_REPOSITORY https://github.com/ocornut/imgui.git
+    GIT_TAG v1.89.9  # Using a stable version
+)
+FetchContent_MakeAvailable(imgui)
+
+# Create ImGui library target
+add_library(imgui STATIC
+    ${imgui_SOURCE_DIR}/imgui.cpp
+    ${imgui_SOURCE_DIR}/imgui_demo.cpp
+    ${imgui_SOURCE_DIR}/imgui_draw.cpp
+    ${imgui_SOURCE_DIR}/imgui_tables.cpp
+    ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_dx9.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_win32.cpp
+)
+
+# Set include directories for ImGui
+target_include_directories(imgui PUBLIC 
+    ${imgui_SOURCE_DIR}
+    ${imgui_SOURCE_DIR}/backends
+)
+
+# Link DirectX libraries for ImGui
+target_link_libraries(imgui PUBLIC
+    d3d9
+    d3dx9
+)
+
 # Add main build targets
 add_subdirectory(Code)
 
