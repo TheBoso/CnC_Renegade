@@ -43,7 +43,12 @@ target_link_libraries(wwcommon INTERFACE
     binkstub
     gamespy
     d3d8lib
+    imgui
 )
+
+
+
+
 
 # Module static libraries
 add_subdirectory(BinkMovie)
@@ -62,6 +67,10 @@ add_subdirectory(wwsaveload)
 add_subdirectory(wwtranslatedb)
 add_subdirectory(wwui)
 add_subdirectory(wwutil)
+
+
+
+
 
 # Final targets
 add_subdirectory(BandTest)
