@@ -1973,13 +1973,11 @@ void SoldierGameObj::Apply_Control( void )
 		DIAG_LOG(( "ACPR", "%1.2f; %1.2f; %1.2f", pos.X, pos.Y, pos.Z ));
 	}
 
-	if (this == COMBAT_STAR && Control.Get_Boolean(ControlClass::BOOLEAN_WEAPON_FIRE_PRIMARY)
+	if (this == COMBAT_STAR && Control.Get_Boolean(ControlClass::BOOLEAN_ACTION)
 		&& GameMaster::IsPossessingOther() == false)
 	{
 		Vector3 myPos;
 		this->Get_Position(&myPos);
-
-		myPos.Z += 3.0f;
 
 		GameMaster::SpawnObject(myPos);
 	}

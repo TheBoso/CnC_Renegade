@@ -90,6 +90,7 @@ public:
    static void                List_Available_Definitions (void); 
    static void                List_Available_Definitions (int superclass_id); 	
 	static uint32					Get_New_ID (uint32 class_id);
+	static DefinitionClass* Find_Definition_From_Pedia_ID(int id);
 
 	// Definition registration
 	static void						Register_Definition (DefinitionClass *definition);

@@ -926,6 +926,27 @@ DefinitionMgrClass::Get_New_ID (uint32 class_id)
 	return new_id;
 }
 
+DefinitionClass* DefinitionMgrClass::Find_Definition_From_Pedia_ID(int id)
+{
+	for (int i = 0; i < _DefinitionCount; i++)
+	{
+			if (_SortedDefinitionArray[i]->Get_Class_ID () != CLASSID_GAME_OBJECTS)
+		{
+			continue;
+		}
+	
+			DamageableGameObjDef * damageable = reinterpret_cast<DamageableGameObjDef*>(_SortedDefinitionArray[i]);
+			if (damageable != NULL)
+			{
+				if (damageable->Get_Encyclopedia_ID() == id)
+				{
+					return _SortedDefinitionArray[i];
+				}
+			}
+	}
+	return NULL;
+}
+
 
 ////////////////////////////////////////////////////////////////
 //
