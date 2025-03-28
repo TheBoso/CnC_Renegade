@@ -59,3 +59,4 @@ IDL_*.loc
 .clang-format
 /.vscode
 /build*
+FIX_AUDIO - PUT IN BUILD DIR.BAT
