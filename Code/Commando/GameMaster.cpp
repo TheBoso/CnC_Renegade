@@ -72,12 +72,14 @@ void GameMaster::ControlObject(PhysicalGameObj* targetObject)
 		soldier->Set_Control_Owner(CombatManager::Get_My_Id());
 		soldier->Control_Enable(true);
 		soldier->Reset_Controller();
+		soldier->Remove_All_Observers();
 		CombatManager::Set_The_Star(soldier);
 
 		
 		ActionParamsStruct parameters;
-		soldier->Get_Action()->Begin_Hibernation();
-		soldier->Get_Action()->Follow_Input(parameters);
+		ActionClass* currAction = soldier->Get_Action();
+		currAction->Reset(999);
+		currAction->Follow_Input(parameters);
 		soldier->Generate_Control();
 
 
