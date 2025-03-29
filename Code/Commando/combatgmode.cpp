@@ -64,7 +64,6 @@
 #include "wwprofile.h"
 #include "gametype.h"
 #include "messagewindow.h"
-#include "objectives.h"
 #include "multihud.h"
 #include "textureloader.h"
 #include "wolgmode.h"
@@ -113,6 +112,9 @@
 #include "dialogtests.h"
 #include "dialogmgr.h"
 #include "GameSpy_QnR.h"
+#include "DefinitionListDialog.h"
+#include "GameMaster.h"
+#include "objectives.h"
 
 /*
 **
@@ -218,7 +220,8 @@ void	CombatGameModeClass::Combat_Keyboard( void )
 			StatisticsDisplayManager::Set_Display( "fps" );
 		}
 	}
-#else
+#endif
+
 	bool to_menu=Input::Get_State( INPUT_FUNCTION_MENU_TOGGLE );
 	// If game doesn't have a focus and combat is active, suspend combat by entering menu
 	if (!GameInFocus) {
@@ -234,12 +237,20 @@ void	CombatGameModeClass::Combat_Keyboard( void )
 	//	Handle the in-game EVA mission objectives window
 	//
 	if ( IS_MISSION && Input::Get_State( INPUT_FUNCTION_EVA_MISSION_OBJECTIVES_TOGGLE ) ) {
-		if ( ObjectiveManager::Is_Viewer_Displayed() ) {
-			ObjectiveManager::Page_Down_Viewer();
+		if (GameMaster::IsGameMaster()) {
+			// For GameMaster, show definition list instead of mission objectives
+			DefinitionListDialog::DoDialog();
 		} else {
-			ObjectiveManager::Display_Viewer( true );
+			// For regular players, show mission objectives
+			if ( ObjectiveManager::Is_Viewer_Displayed() ) {
+				ObjectiveManager::Page_Down_Viewer();
+			} else {
+				ObjectiveManager::Display_Viewer( true );
+			}
 		}
-   }
+	}
+
+#ifdef ATI_DEMO_HACK
 #endif
 
 	if ( Input::Get_State( INPUT_FUNCTION_HELP_SCREEN ) ) {

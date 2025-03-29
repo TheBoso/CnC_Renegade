@@ -849,6 +849,8 @@
 #define IDC_VISIT_WEB_BUTTON            11037
 #define IDC_EXIT_BUTTON                 11038
 #define IDM_TOGGLE_FULLSCREEN           40001
+#define IDD_DEFINITION_LIST                 11000
+#define IDC_DEFINITION_LIST                 11001
 
 // Next default values for new objects
 // 

@@ -73,6 +73,7 @@
 #include "dlgcncreference.h"
 #include "wwmemlog.h"
 #include "consolemode.h"
+#include "DefinitionListDialog.h"
 #include "specialbuilds.h"
 
 
@@ -121,6 +122,7 @@ DialogFactoryBaseClass *FactoryArray[FACTORY_COUNT] =
 	new DialogFactoryClass<MPLanGameListMenuClass>,
 	NULL,	//IDC_MENU_MP_LAN_JOIN_BUTTON
 	NULL,	//IDC_MENU_MP_LAN_START_BUTTON
+	new DialogFactoryClass<DefinitionListDialog>,
 };
 
 

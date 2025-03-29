@@ -303,7 +303,7 @@ EvaViewerTabClass::View_Entry (int entry_index)
 		anim_name	= object->Get_Anim_Name ();
 		min_dist		= object->Get_Min_Distance ();
 		definition_name = object->Get_Definition_Name ();
-		GameMaster::SetSelectedDef(DefinitionMgrClass::Find_Definition_From_Pedia_ID(object->Get_ID()));
+		//GameMaster::SetSelectedDef(DefinitionMgrClass::Find_Definition_From_Pedia_ID(object->Get_ID()));
 	}
 
 	//

@@ -1,0 +1,10 @@
+#include "resource.h"
+#include "dialogresource.h"
+
+IDD_DEFINITION_LIST DIALOG DISCARDABLE 0, 0, 400, 500
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Definition List"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "",IDC_DEFINITION_LIST,"ListCtrl",LVS_REPORT | WS_BORDER | WS_TABSTOP,10,10,380,480
+END 

@@ -4,6 +4,8 @@ set(WWUI_SRC
     checkboxctrl.cpp
     childdialog.cpp
     comboboxctrl.cpp
+    DefinitionListDialog.cpp
+    DefinitionListDialog.h
     dialogbase.cpp
     dialogcontrol.cpp
     dialogmgr.cpp
